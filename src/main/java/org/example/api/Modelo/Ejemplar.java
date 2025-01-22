@@ -28,4 +28,13 @@ public class Ejemplar {
     @Column(name = "estado")
     private String estado;
 
+
+    public Ejemplar() {
+    }
+
+    public Ejemplar(Integer id, String estado, Libro isbn) {
+        this.id = id;
+        this.estado = estado;
+        this.isbn = isbn;
+    }
 }

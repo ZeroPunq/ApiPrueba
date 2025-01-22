@@ -45,4 +45,16 @@ public class Usuario {
     @Column(name = "penalizacionHasta")
     private LocalDate penalizacionHasta;
 
+    public Usuario() {
+    }
+
+    public Usuario(Integer id, LocalDate penalizacionHasta, String tipo, String password, String email, String nombre, String dni) {
+        this.id = id;
+        this.penalizacionHasta = penalizacionHasta;
+        this.tipo = tipo;
+        this.password = password;
+        this.email = email;
+        this.nombre = nombre;
+        this.dni = dni;
+    }
 }
