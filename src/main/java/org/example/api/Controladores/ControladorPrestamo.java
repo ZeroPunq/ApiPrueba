@@ -2,6 +2,7 @@ package org.example.api.Controladores;
 
 import jakarta.validation.Valid;
 import org.example.api.Modelo.Prestamo;
+import org.example.api.Modelo.Usuario;
 import org.example.api.Repositorios.PrestamoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,10 +31,10 @@ public class ControladorPrestamo {
 
     // GET: Obtener préstamo por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Prestamo> getPrestamo(@PathVariable Integer id) {
-        return prestamoRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Prestamo> getPrestamo(@PathVariable int id) {
+        Prestamo p = this.prestamoRepository.findById(id).get();
+        return ResponseEntity.ok(p);
+
     }
 
     // POST: Insertar préstamo

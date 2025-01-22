@@ -32,7 +32,7 @@ public class ControladorEjemplar {
     // GET: Obtener ejemplar por ID
     @GetMapping("/{id}")
     public ResponseEntity<Ejemplar> getEjemplar(@PathVariable Integer id) {
-        return ejemplarRepository.findById(String.valueOf(id))
+        return ejemplarRepository.findById(Integer.valueOf(String.valueOf(id)))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -48,7 +48,7 @@ public class ControladorEjemplar {
     @PutMapping("/{id}")
     public ResponseEntity<Ejemplar> updateEjemplar(@PathVariable Integer id,
                                                    @RequestParam String estado) {
-        Optional<Ejemplar> ejemplarExistente = ejemplarRepository.findById(String.valueOf(id));
+        Optional<Ejemplar> ejemplarExistente = ejemplarRepository.findById(Integer.valueOf(String.valueOf(id)));
         if (ejemplarExistente.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -63,7 +63,7 @@ public class ControladorEjemplar {
     // DELETE: Eliminar ejemplar
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEjemplar(@PathVariable Integer id) {
-        ejemplarRepository.deleteById(String.valueOf(id));
+        ejemplarRepository.deleteById(Integer.valueOf(String.valueOf(id)));
         return ResponseEntity.ok("Ejemplar con ID: " + id + " eliminado");
     }
 }

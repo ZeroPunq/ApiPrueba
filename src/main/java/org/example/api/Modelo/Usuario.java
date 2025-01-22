@@ -1,5 +1,6 @@
 package org.example.api.Modelo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 public class Usuario {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Size(max = 15)
@@ -42,19 +44,20 @@ public class Usuario {
     @Column(name = "tipo", nullable = false)
     private String tipo;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "penalizacionHasta")
     private LocalDate penalizacionHasta;
 
     public Usuario() {
     }
 
-    public Usuario(Integer id, LocalDate penalizacionHasta, String tipo, String password, String email, String nombre, String dni) {
+    public Usuario(Integer id, String dni, String nombre, String email, String password, String tipo, LocalDate penalizacionHasta) {
         this.id = id;
-        this.penalizacionHasta = penalizacionHasta;
-        this.tipo = tipo;
-        this.password = password;
-        this.email = email;
-        this.nombre = nombre;
         this.dni = dni;
+        this.nombre = nombre;
+        this.email = email;
+        this.password = password;
+        this.tipo = tipo;
+        this.penalizacionHasta = penalizacionHasta;
     }
 }

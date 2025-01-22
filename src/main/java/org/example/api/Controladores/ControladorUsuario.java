@@ -1,6 +1,7 @@
 package org.example.api.Controladores;
 
 import jakarta.validation.Valid;
+import org.example.api.Modelo.Prestamo;
 import org.example.api.Modelo.Usuario;
 import org.example.api.Repositorios.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,17 +34,18 @@ public class ControladorUsuario {
 
     // GET: Obtener usuario por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> getUsuario(@PathVariable Integer id) {
-        return usuarioRepository.findById(String.valueOf(id))
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Usuario> getUsuario(@PathVariable int id) {
+        Usuario u = this.usuarioRepository.findById(id).get();
+        return ResponseEntity.ok(u);
+
     }
+
 
     // POST: Insertar usuario
     @PostMapping("/usuario")
     public ResponseEntity<Usuario> addUsuario(@Valid @RequestBody Usuario usuario) {
-        Usuario usuarioPersistido = usuarioRepository.save(usuario);
-        return ResponseEntity.ok().body(usuarioPersistido);
+        this.usuarioRepository.save(usuario);
+        return ResponseEntity.created(null).body(usuario);
     }
 
     // PUT: Actualizar usuario con imagen de perfil opcional
@@ -52,7 +54,7 @@ public class ControladorUsuario {
                                                  @RequestParam String nombre,
                                                  @RequestParam String email,
                                                  @RequestParam(required = false) MultipartFile imagen) {
-        Optional<Usuario> usuarioExistente = usuarioRepository.findById(String.valueOf(id));
+        Optional<Usuario> usuarioExistente = usuarioRepository.findById(Integer.valueOf(String.valueOf(id)));
         if (usuarioExistente.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -85,7 +87,7 @@ public class ControladorUsuario {
     // DELETE: Eliminar usuario
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUsuario(@PathVariable Integer id) {
-        usuarioRepository.deleteById(String.valueOf(id));
+        usuarioRepository.deleteById(Integer.valueOf(String.valueOf(id)));
         return ResponseEntity.ok("Usuario con ID: " + id + " eliminado");
     }
 }
