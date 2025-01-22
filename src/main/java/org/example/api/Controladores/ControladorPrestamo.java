@@ -46,18 +46,9 @@ public class ControladorPrestamo {
 
     // PUT: Actualizar préstamo
     @PutMapping("/{id}")
-    public ResponseEntity<Prestamo> updatePrestamo(@PathVariable Integer id,
-                                                   @RequestParam String fechaDevolucion) {
-        Optional<Prestamo> prestamoExistente = prestamoRepository.findById(id);
-        if (prestamoExistente.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Prestamo prestamoActualizado = prestamoExistente.get();
-        prestamoActualizado.setFechaDevolucion(LocalDate.parse(fechaDevolucion));
-
-        prestamoRepository.save(prestamoActualizado);
-        return ResponseEntity.ok(prestamoActualizado);
+    public ResponseEntity<Prestamo> update(@Valid @RequestBody Prestamo prestamo, @PathVariable int id) {
+        Prestamo persistido = prestamoRepository.save(prestamo);
+        return ResponseEntity.ok().body(persistido);
     }
 
     // DELETE: Eliminar préstamo

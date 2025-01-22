@@ -4,6 +4,7 @@ package org.example.api.Controladores;
 
 import jakarta.validation.Valid;
 import org.example.api.Modelo.Ejemplar;
+import org.example.api.Modelo.Prestamo;
 import org.example.api.Repositorios.EjemplarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,24 +47,15 @@ public class ControladorEjemplar {
 
     // PUT: Actualizar ejemplar
     @PutMapping("/{id}")
-    public ResponseEntity<Ejemplar> updateEjemplar(@PathVariable Integer id,
-                                                   @RequestParam String estado) {
-        Optional<Ejemplar> ejemplarExistente = ejemplarRepository.findById(Integer.valueOf(String.valueOf(id)));
-        if (ejemplarExistente.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Ejemplar ejemplarActualizado = ejemplarExistente.get();
-        ejemplarActualizado.setEstado(estado);
-
-        ejemplarRepository.save(ejemplarActualizado);
-        return ResponseEntity.ok(ejemplarActualizado);
+    public ResponseEntity<Ejemplar> update(@Valid @RequestBody Ejemplar ejemplar, @PathVariable int id) {
+        Ejemplar persistido = ejemplarRepository.save(ejemplar);
+        return ResponseEntity.ok().body(persistido);
     }
 
     // DELETE: Eliminar ejemplar
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEjemplar(@PathVariable Integer id) {
-        ejemplarRepository.deleteById(Integer.valueOf(String.valueOf(id)));
+        ejemplarRepository.deleteById(id);
         return ResponseEntity.ok("Ejemplar con ID: " + id + " eliminado");
     }
 }

@@ -49,39 +49,10 @@ public class ControladorUsuario {
     }
 
     // PUT: Actualizar usuario con imagen de perfil opcional
-    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Usuario> updateUsuario(@PathVariable Integer id,
-                                                 @RequestParam String nombre,
-                                                 @RequestParam String email,
-                                                 @RequestParam(required = false) MultipartFile imagen) {
-        Optional<Usuario> usuarioExistente = usuarioRepository.findById(Integer.valueOf(String.valueOf(id)));
-        if (usuarioExistente.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Usuario usuarioActualizado = usuarioExistente.get();
-        usuarioActualizado.setNombre(nombre);
-        usuarioActualizado.setEmail(email);
-
-        // Guardar imagen si se proporciona
-        if (imagen != null && !imagen.isEmpty()) {
-            String rutaDirectorio = "uploads/usuarios/";
-            File directorio = new File(rutaDirectorio);
-            if (!directorio.exists()) {
-                directorio.mkdirs();
-            }
-
-            String filePath = rutaDirectorio + imagen.getOriginalFilename();
-            File destino = new File(filePath);
-            try {
-                imagen.transferTo(destino);
-            } catch (IOException e) {
-                return ResponseEntity.internalServerError().build();
-            }
-        }
-
-        usuarioRepository.save(usuarioActualizado);
-        return ResponseEntity.ok(usuarioActualizado);
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> update(@Valid @RequestBody Usuario usuario, @PathVariable int id) {
+        Usuario persistido = usuarioRepository.save(usuario);
+        return ResponseEntity.ok().body(persistido);
     }
 
     // DELETE: Eliminar usuario
