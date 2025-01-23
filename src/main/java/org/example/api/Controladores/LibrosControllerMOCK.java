@@ -82,42 +82,12 @@ public class LibrosControllerMOCK {
     }
 
     //PUT --> UPDATE (Actualizar libro y archivo adjunto)
-    @PutMapping(value = "/{isbn}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Libro> updateLibro(@RequestParam String isbn,
-                                             @RequestParam String titulo,
-                                             @RequestParam String autor,
-                                             @RequestParam(required = false) MultipartFile imagen) {
-        Optional<Libro> libroExistente = repositorioLibros.findById(isbn);
+   @PutMapping("/{isbn}")
+    public ResponseEntity<Libro> updateLibro(@RequestBody Libro libro, @PathVariable String isbn) {
+        Libro libroPersisitido = repositorioLibros.save(libro);
+        return ResponseEntity.ok().body(libroPersisitido);
+   }
 
-        if (libroExistente.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Libro libroActualizado = libroExistente.get();
-        libroActualizado.setTitulo(titulo);
-        libroActualizado.setAutor(autor);
-
-        // Guardar archivo si se proporciona
-        if (imagen != null && !imagen.isEmpty()) {
-            String rutaDirectorio = "uploads/";
-            File directorio = new File(rutaDirectorio);
-            if (!directorio.exists()) {
-                directorio.mkdirs(); // Crear directorio si no existe
-            }
-
-            String filePath = rutaDirectorio + imagen.getOriginalFilename();
-            File destino = new File(filePath);
-            try {
-                imagen.transferTo(destino);
-                System.out.println("Archivo guardado en: " + filePath);
-            } catch (IOException e) {
-                return ResponseEntity.internalServerError().build();
-            }
-        }
-
-        repositorioLibros.save(libroActualizado);
-        return ResponseEntity.ok(libroActualizado);
-    }
 
     //DELETE
     @DeleteMapping("/{isbn}")

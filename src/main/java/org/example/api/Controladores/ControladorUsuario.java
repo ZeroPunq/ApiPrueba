@@ -48,7 +48,7 @@ public class ControladorUsuario {
         return ResponseEntity.created(null).body(usuario);
     }
 
-    // PUT: Actualizar usuario con imagen de perfil opcional
+    // PUT: Actualizar usuario
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> update(@Valid @RequestBody Usuario usuario, @PathVariable int id) {
         Usuario persistido = usuarioRepository.save(usuario);
